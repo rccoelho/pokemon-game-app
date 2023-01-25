@@ -1,14 +1,19 @@
 <template>
 <div class="footer-container">
-    <h1>
-        This is the footer!
-    </h1>
+    <p>&copy; Rafael Coelho {{ getCurrentDate() }}</p>
 </div>
 </template>
 
 <script>
 export default {
     name: "Footer",
+
+    methods: {
+        getCurrentDate() {
+            const date = new Date().getFullYear()
+            return date
+        }
+    }
 }
 </script>
 

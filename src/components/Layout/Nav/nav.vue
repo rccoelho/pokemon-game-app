@@ -1,27 +1,52 @@
 <template>
 <div class="nav-container">
-    <router-link to="/">Home</router-link>
-    <router-link to="/play">Play</router-link>
-    <router-link to="/pokedex">Pokedex</router-link>
-    <router-link to="/high-scores">High Scores</router-link>
+    <router-link @click="linkSelected('/')" :class="`link ${selected === '/' ? 'link__selected' : ''}`" to="/">Home</router-link>
+    <router-link @click="linkSelected('/pokedex')" :class="`link ${selected === '/pokedex' ? 'link__selected' : ''}`" to="/pokedex">Pokédex</router-link>
+    <router-link @click="linkSelected('/play')" :class="`link ${selected === '/play' ? 'link__selected' : ''}`" to="/play">Play</router-link>
+    <!-- <router-link @click="linkSelected('/high-scores')" :class="`link ${selected === '/high-scores' ? 'link__selected' : ''}`" to="/high-scores">High Scores</router-link> -->
 </div>
 </template>
 
 <script>
 export default {
     name: "Nav",
+    data() {
+        return {
+            selected: "",
+        }
+    },
+    mounted() {
+        this.linkSelected(window.location.pathname)
+    },
+    methods: {
+        linkSelected(name) {
+            this.selected = name;
+        }
+    },
 }
 </script>
 
 <style>
 .nav-container {
-    background: black;
-    color: white;
-    
+    height: 3rem;
     padding: 2rem;
     
     display: flex;
     align-items: center;
     column-gap: 2rem;
 }
+
+.link {
+    color: white;
+    transition: color 0.2s;
+}
+
+.link:hover {
+    color: black;
+}
+
+.link__selected {
+    color: black;
+}
+
 </style>
