@@ -53,7 +53,6 @@ export default {
                 .then(data => {
                     this.pokemon = data;
                     this.pokemons = [...this.pokemons, this.pokemon.name];
-                    this.randomizePokemonsArray();
                 })
         },
 
@@ -76,6 +75,7 @@ export default {
 
                 let id = this.getRandomId();
                 this.fetchPokemon(id);
+                this.randomizePokemonsArray();
             }, 2000);
         },
 
