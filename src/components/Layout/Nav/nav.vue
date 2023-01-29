@@ -34,11 +34,13 @@ export default {
     display: flex;
     align-items: center;
     column-gap: 2rem;
+
+    font-size: 1.25rem;
 }
 
 .link {
     color: white;
-    transition: color 0.2s;
+    transition: color 0.1s;
 }
 
 .link:hover {

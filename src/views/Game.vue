@@ -1,19 +1,24 @@
 <template>
-<div class="main-content-container">
-    <h2>Score: {{ currentScore }}</h2>
+<div v-if="pokemons.length > 0" class="main-content-container">
+    <h1>Score: {{ currentScore }}</h1>
     <img 
-        :class="showPokemon ? '' : 'hidePokemon'" 
-        :src="pokemon.sprites?.other['official-artwork'].front_default" 
+        :style="`display: ${setDisplay}`"
+        :class="`
+            ${showPokemon ? '' : 'hidePokemon'}
+        `"  
+        :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemons.find(obj => !obj.decoy).id}.png`" 
+        @load="resetLevel"
         width="300" 
         alt="pokemon"
-    >
-    <div>
-        <GameOptionCard
-            v-for="(pokemon, index) in pokemons" :key="index" 
-            :option="pokemon"
-            @click="handleClick(pokemon)"
-        />
-    </div>
+    > 
+    <GameOptionCard
+        v-for="(pokemon, index) in pokemons" :key="index" 
+        :style="`display: ${setDisplay}`"
+        :class="getRightAnswer(pokemon.name)"
+        :option="pokemon.name"
+        :disabled="disabled"
+        @click="disabled ? null : handleClick(pokemon.name)"
+    />
 </div>
 </template>
 
@@ -28,31 +33,25 @@ export default {
         return {
             currentScore: 0,
             pokemon: "",
-            pokemons: [
-                "Pikachu",
-                "Ekans",
-                "Geodude",
-            ],
+            pokemons: [],
             showPokemon: false,
+            disabled: true,
+            setBackgroundAnswer: false,
+            setDisplay: false,
         }
     },
 
     mounted() {
-        let id = this.getRandomId();
-        this.fetchPokemon(id);
+        this.fetchPokemons();
     },
 
     methods: {
-        getRandomId() {
-            return Math.floor(Math.random() * (151 - 1 + 1) + 1)
-        },
-
-        fetchPokemon(id) {
-            fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        fetchPokemons() {
+            fetch(import.meta.env.VITE_API_URL + `play`)
                 .then(res => res.json())
                 .then(data => {
-                    this.pokemon = data;
-                    this.pokemons = [...this.pokemons, this.pokemon.name];
+                    this.pokemon = data.find(obj => !obj.decoy)
+                    this.pokemons = data;
                 })
         },
 
@@ -64,31 +63,56 @@ export default {
             }
             
             this.showPokemon = true;
+            this.disabled = true;
+            this.setBackgroundAnswer = true;
 
             setTimeout(() => {
-                this.pokemons = [
-                    "Pikachu",
-                    "Ekans",
-                    "Geodude",
-                ];
-                this.showPokemon = false;
-
-                let id = this.getRandomId();
-                this.fetchPokemon(id);
-                this.randomizePokemonsArray();
+                this.setDisplay = "none"
+                this.setBackgroundAnswer = false
+                this.fetchPokemons();
             }, 2000);
         },
 
-        randomizePokemonsArray() {
-            var newArray = this.pokemons.sort(() => 0.5 - Math.random()); 
-            this.pokemons = newArray
+        resetLevel() {
+            this.setDisplay = ""
+            this.showPokemon = false
+            this.disabled = false
+        },
+
+        getRightAnswer(name) {
+            if(!this.setBackgroundAnswer)
+                return ''
+
+            return this.pokemon.name !== name ? 'card-container__wrong' : 'card-container__correct'
         }
     },
 }
 </script>
 
 <style scoped>
+h1 {
+    margin: 2rem;
+}
+
+img {
+    transition: filter 1s;
+    animation: fadeIn 0.5s ease-in;
+}
+
 .hidePokemon {
     filter: brightness(0);
+}
+
+.card-container {
+    transition: transform 1s, background 1s;
+}
+
+.card-container__correct {
+    background: rgb(63, 255, 63, 0.7);
+    transform: scale(1.1);
+}
+
+.card-container__wrong {
+    background: rgb(255, 63, 63, 0.7);
 }
 </style>

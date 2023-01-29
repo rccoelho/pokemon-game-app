@@ -7,7 +7,7 @@
 }
 
 html {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: 'Gloria Hallelujah', Arial, Helvetica, sans-serif;
   background: rgb(108,194,255);
   background: linear-gradient(90deg, rgba(108,194,255,1) 0%, rgba(255,98,98,1) 93%);
   
@@ -21,7 +21,12 @@ a {
 .main-content-container {
   margin: 2rem auto;
   padding: 1rem;
-  min-height: 100vh;
+  min-height: 100%;
   max-width: 1024px;
   text-align: center;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
