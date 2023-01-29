@@ -40,10 +40,12 @@ export default {
     },
     methods: {
         fetchPokemons(limit, offset) {
-            this.offset = offset
             fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`)
                 .then(res => res.json())
-                .then(data => this.pokemons = data.results)
+                .then(data => {
+                    this.offset = offset
+                    this.pokemons = data.results
+                })
         },
         handleClick(name) {
             this.$router.push({ path: `/pokemon/${name}` })
