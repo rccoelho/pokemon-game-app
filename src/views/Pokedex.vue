@@ -1,16 +1,18 @@
 <template>
-<div class="main-content-container pokedex-container">
+<div class="main-content-container">
+    <h1>Pick the generation: </h1>
     <div class="generation">
-        <span @click="fetchPokemons(151, 0)">#1 - #151</span>
-        <span @click="fetchPokemons(251, 151)">#152 - #251</span>
-        <span @click="fetchPokemons(386, 251)">#252 - #386</span>
-        <span @click="fetchPokemons(493, 386)">#387 - #493</span>
-        <span @click="fetchPokemons(649, 493)">#494 - #649</span>
-        <span @click="fetchPokemons(721, 649)">#650 - #721</span>
-        <span @click="fetchPokemons(809, 721)">#722 - #809</span>
-        <span @click="fetchPokemons(905, 809)">#810 - #905</span>
-        <span @click="fetchPokemons(1008, 905)">#906 - #1008</span>
+        <span :class="gen === 1 ? 'selected' : ''" @click="handleGenSelect(1, 151, 0)">#1 - #151</span>
+        <span :class="gen === 2 ? 'selected' : ''" @click="handleGenSelect(2, 100, 151)">#152 - #251</span>
+        <span :class="gen === 3 ? 'selected' : ''" @click="handleGenSelect(3, 135, 251)">#252 - #386</span>
+        <span :class="gen === 4 ? 'selected' : ''" @click="handleGenSelect(4, 107, 386)">#387 - #493</span>
+        <span :class="gen === 5 ? 'selected' : ''" @click="handleGenSelect(5, 156, 493)">#494 - #649</span>
+        <span :class="gen === 6 ? 'selected' : ''" @click="handleGenSelect(6, 72, 649)">#650 - #721</span>
+        <span :class="gen === 7 ? 'selected' : ''" @click="handleGenSelect(7, 88, 721)">#722 - #809</span>
+        <span :class="gen === 8 ? 'selected' : ''" @click="handleGenSelect(8, 96, 809)">#810 - #905</span>
+        <span :class="gen === 9 ? 'selected' : ''" @click="handleGenSelect(9, 103, 905)">#906 - #1008</span>
     </div>
+    <h1>Pokémons:</h1>
     <PokemonCard 
         v-for="(pokemon, index) in this.pokemons" 
         :key="index" 
@@ -30,6 +32,7 @@ export default {
         return {
             pokemons: [],
             offset: 0,
+            gen: 1,
         };
     },
     mounted() {
@@ -44,6 +47,10 @@ export default {
         },
         handleClick(name) {
             this.$router.push({ path: `/pokemon/${name}` })
+        },
+        handleGenSelect(gen, limit, offset) {
+            this.gen = gen;
+            this.fetchPokemons(limit, offset);
         }
     },
     components: { PokemonCard }
@@ -51,18 +58,32 @@ export default {
 </script>
 
 <style scoped>
-.generation {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+h1 {
+    margin: 1rem;
+    text-align: left;
 }
 
-.generation > span{
+.generation {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: auto;
+}
+
+.generation > span {
+    padding: 0.5rem;
     transition: transform 0.1s;
 }
 
+.selected,
 .generation > span:hover {
     cursor: pointer;
-    transform: scale(1.2);
+    transform: scale(1.1);
+}
+
+.selected {
+    background-color: black;
+    color: white;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
 </style>

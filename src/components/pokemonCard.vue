@@ -44,7 +44,7 @@ export default {
 }
 
 .pokedex-card-container:hover > img {
-    transform: rotate(3deg) scale(1.25);
+    transform: rotate(3deg) scale(1.3);
 }
 
 img {
